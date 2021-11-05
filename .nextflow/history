@@ -1,0 +1,1 @@
+2021-02-17 01:36:50	-	crazy_hoover	-	75a2f9763e9b4c1aa20ad342ae3ce148c33cc65a	083b629d-7d45-448c-9da4-471e56234d3d	nextflow run nf-core/viralrecon -r 1.1.0 --help

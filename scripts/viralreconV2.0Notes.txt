@@ -1,0 +1,17 @@
+1. Options disabled:
+* --min_coverage: 10
+* --max_allele_freq: 0.75
+* --min_allele_freq: 0.25
+* --ivar_trim_window_width: 4
+* --ivar_trim_min_qual: 20
+* --ivar_trim_min_len: 20
+* --min_base_qual: 20
+* --mpileup_depth: 0
+* --unqualified_percent_limit: 10
+* --min_trim_length: 50
+* --qualified_quality_phred: 20
+* --cut_mean_quality: 20
+2. Processes reporting in Progress: V2.0 lacks the process names.
+V1.1.0:	[e6/ba0a84] process > GUNZIP_FASTA                   [100%] 1 of 1 ✔
+V2.0:	[ee/7f0927] process > NFCORE_VIRALRECON:ILLUMINA:... [100%] 1 of 1 ✔
+

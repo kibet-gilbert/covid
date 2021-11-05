@@ -1,0 +1,1 @@
+singularity run --app read_fast5_basecaller.py albacore.sif -f FLO-MIN106 -k SQK-LSK109 -i data/EXP-NBD196 -t 20 -s data/EXP-NBD196_basecall -o fastq --disable_filtering --barcoding --recursive

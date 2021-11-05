@@ -1,0 +1,40 @@
+Bootstrap: docker
+From: python:3.8.7-slim-buster
+
+%post
+    VERSION="3.1.6"
+    pip install ont-fast5-api==${VERSION}
+
+%environment
+    export SHELL=/bin/bash
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+
+%test
+    single_to_multi_fast5 --help
+    multi_to_single_fast5 --help
+    compress_fast5 --help
+    fast5_subset --help
+
+%apprun single_to_multi_fast5
+    single_to_multi_fast5 $*
+
+%apprun multi_to_single_fast5
+    multi_to_single_fast5 $*
+
+%apprun compress_fast5
+    compress_fast5 $*
+
+%apprun fast5_subset
+    fast5_subset $*
+%help
+    Singularity container for nanocompore (Python 3.7.9)
+    Apps available:
+    * single_to_multi_fast5
+    * multi_to_single_fast5
+    * compress_fast5
+    * fast5_subset
+
+%labels
+    author="Adrien Leger"
+    author_email="contact@adrienleger.com"

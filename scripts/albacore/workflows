@@ -1,0 +1,52 @@
+Parsing config files in /usr/local/lib/python3.5/dist-packages/albacore/data_versioned.
+Available flowcell + kit combinations are:
+flowcell    kit         barcoding  config file
+FLO-MIN106  SQK-DCS108             r94_450bps_linear.cfg
+FLO-MIN106  SQK-LRK001             r94_450bps_linear.cfg
+FLO-MIN106  SQK-LSK108             r94_450bps_linear.cfg
+FLO-MIN106  SQK-LSK109             r94_450bps_linear.cfg
+FLO-MIN106  SQK-LWB001  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-LWP001             r94_450bps_linear.cfg
+FLO-MIN106  SQK-PBK004  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-PCS108             r94_450bps_linear.cfg
+FLO-MIN106  SQK-PSK004             r94_450bps_linear.cfg
+FLO-MIN106  SQK-RAB201  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-RAB204  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-RAD002             r94_450bps_linear.cfg
+FLO-MIN106  SQK-RAD003             r94_450bps_linear.cfg
+FLO-MIN106  SQK-RAD004             r94_450bps_linear.cfg
+FLO-MIN106  SQK-RAS201             r94_450bps_linear.cfg
+FLO-MIN106  SQK-RBK001  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-RBK004  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-RLB001  included   r94_450bps_linear.cfg
+FLO-MIN106  SQK-RLI001             r94_450bps_linear.cfg
+FLO-MIN106  SQK-RNA001             r941_70bps_rna_linear.cfg
+FLO-MIN106  SQK-RPB004  included   r94_450bps_linear.cfg
+FLO-MIN106  VSK-VBK001             r94_450bps_linear.cfg
+FLO-MIN106  VSK-VMK001  included   r94_450bps_linear.cfg
+FLO-MIN106  VSK-VSK001             r94_450bps_linear.cfg
+FLO-MIN107  SQK-DCS108             r95_450bps_linear.cfg
+FLO-MIN107  SQK-LRK001             r95_450bps_linear.cfg
+FLO-MIN107  SQK-LSK108             r95_450bps_linear.cfg
+FLO-MIN107  SQK-LSK109             r95_450bps_linear.cfg
+FLO-MIN107  SQK-LWB001  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-LWP001             r95_450bps_linear.cfg
+FLO-MIN107  SQK-PBK004  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-PCS108             r95_450bps_linear.cfg
+FLO-MIN107  SQK-PSK004             r95_450bps_linear.cfg
+FLO-MIN107  SQK-RAB201  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-RAB204  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-RAD002             r95_450bps_linear.cfg
+FLO-MIN107  SQK-RAD003             r95_450bps_linear.cfg
+FLO-MIN107  SQK-RAD004             r95_450bps_linear.cfg
+FLO-MIN107  SQK-RAS201             r95_450bps_linear.cfg
+FLO-MIN107  SQK-RBK001  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-RBK004  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-RLB001  included   r95_450bps_linear.cfg
+FLO-MIN107  SQK-RLI001             r95_450bps_linear.cfg
+FLO-MIN107  SQK-RNA001             r941_70bps_rna_linear.cfg
+FLO-MIN107  SQK-RPB004  included   r95_450bps_linear.cfg
+FLO-MIN107  VSK-VBK001             r95_450bps_linear.cfg
+FLO-MIN107  VSK-VMK001  included   r95_450bps_linear.cfg
+FLO-MIN107  VSK-VSK001             r95_450bps_linear.cfg
+FLO-PRO001  SQK-LSK109             r941_450bps_linear_prom.cfg

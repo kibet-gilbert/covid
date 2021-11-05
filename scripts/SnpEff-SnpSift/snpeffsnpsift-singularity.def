@@ -1,0 +1,49 @@
+Bootstrap: docker
+From: ubuntu:16.04
+
+%post
+    apt-get -y update
+    apt-get -y install -y software-properties-common
+    apt-add-repository universe
+    apt-get -y update
+    apt-get -y install wget lsb-release apt-transport-https build-essential gcc-multilib dkms
+
+    VERSION="3.6.0"
+    mkdir /usr/ont-guppy
+    cd /usr/ont-guppy
+    URL="https://mirror.oxfordnanoportal.com/software/analysis/ont-guppy-cpu_${VERSION}_linux64.tar.gz"
+    wget $URL -O - | tar -xzf - --strip-components 1 --no-same-owner
+
+%environment
+    export SHELL=/bin/bash
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export PATH=/usr/ont-guppy/bin:$PATH
+
+%test
+    guppy_aligner --help
+    guppy_barcoder --help
+    guppy_basecaller --help
+
+%runscript
+    echo "Run with '--app' option (run 'singularity run-help' for available apps)"
+
+%apprun guppy_aligner
+    guppy_aligner $*
+
+%apprun guppy_barcoder
+    guppy_barcoder $*
+
+%apprun guppy_basecaller
+    guppy_basecaller $*
+
+%help
+    Singularity container for ont-guppy CPU
+    Apps available:
+    * guppy_aligner
+    * guppy_barcoder
+    * guppy_basecaller
+
+%labels
+    author="Adrien Leger"
+    author_email="contact@adrienleger.com"

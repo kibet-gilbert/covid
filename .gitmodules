@@ -1,0 +1,24 @@
+[submodule "scripts/Deepbinner"]
+	path = scripts/Deepbinner
+	url = https://github.com/kibet-gilbert/Deepbinner.git
+[submodule "scripts/artic-ncov2019"]
+	path = scripts/artic-ncov2019
+	url = https://github.com/artic-network/artic-ncov2019.git
+[submodule "scripts/deML"]
+	path = scripts/deML
+	url = https://github.com/grenaud/deML.git
+[submodule "scripts/fieldbioinformatics"]
+	path = scripts/fieldbioinformatics
+	url = https://github.com/kibet-gilbert/fieldbioinformatics.git
+[submodule "scripts/medaka"]
+	path = scripts/medaka
+	url = https://github.com/nanoporetech/medaka.git
+[submodule "scripts/nextclade/nextclade"]
+	path = scripts/nextclade/nextclade
+	url = https://github.com/kibet-gilbert/nextclade.git
+[submodule "scripts/pangolin"]
+	path = scripts/pangolin
+	url = https://github.com/cov-lineages/pangolin.git
+[submodule "scripts/viralrecon"]
+	path = scripts/viralrecon
+	url = https://github.com/nf-core/viralrecon.git
