@@ -1,0 +1,2 @@
+FASTA header format:
+>Gene name|Isolate name|YYYY-MM-DD|Isolate ID|Passage details/history|Type^^location/state|Host|Originating lab|Submitting lab|Submitter|Location
