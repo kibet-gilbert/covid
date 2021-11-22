@@ -195,13 +195,13 @@ Directory Organization.
 ---------------------------
 
 2.1. MiSeq:  
-	Open the script path-to/covid/scripts/covid_run.sbatch and set the variables: FRead_suffix and RRead_suffix to your desired forward read and reverse read suffix. The defaults are FRead_suffix="L001_R1_001.fastq.gz" and RRead_suffix="L001_R2_001.fastq.gz"  
-	"cd" to path-to/covid/data/<your_data_dir> and execute the sbatch command below: $ sbatch -w compute06 ../../scripts/covid_run.sbatch  
+	Open the script path-to/covid/scripts/covid_run-2.2.miseq.sbatch and set the variables: FRead_suffix and RRead_suffix to your desired forward read and reverse read suffix. The defaults are FRead_suffix="L001_R1_001.fastq.gz" and RRead_suffix="L001_R2_001.fastq.gz"  
+	"cd" to path-to/covid/data/<your_data_dir> and execute the sbatch command below: $ sbatch -w compute06 ../../scripts/covid_run-2.2.miseq.sbatch  
 
 2.2. NextSeq:  
 	Concatenate the reads per sample from *L00?_R1_001.fastq.gz to *con_R1_001.fastq.gz and *L00?_R2_001.fastq.gz to *con_R2_001.fastq.gz  
-	Open the script path-to/covid/scripts/covid_run.sbatch and set the variables: FRead_suffix and RRead_suffix to the right forward read and reverse read suffix: FRead_suffix="con_R1_001.fastq.gz" and RRead_suffix="con_R2_001.fastq.gz"  
-	"cd" to path-to/covid/data/<your_data_dir> and execute the sbatch command below: $ sbatch -w compute06 ../../scripts/covid_run.sbatch  
+	Open the script path-to/covid/scripts/covid_run-2.2.nextseq.sbatch and set the variables: FRead_suffix and RRead_suffix to the right forward read and reverse read suffix: FRead_suffix="con_R1_001.fastq.gz" and RRead_suffix="con_R2_001.fastq.gz"  
+	"cd" to path-to/covid/data/<your_data_dir> and execute the sbatch command below: $ sbatch -w compute06 ../../scripts/covid_run-2.2.nextseq.sbatch  
 
 2.3 ONT:  
 	Create a sample sheet (samplesheet.csv) and save it in the data directory. The format is explained here: https://nf-co.re/viralrecon/2.2/usage#nanopore  
