@@ -777,3 +777,104 @@ filter_seqs() { # Updated version of delete_unwanted function.
  		 fi
 	done
 }
+
+#===============================================================================================================================================================
+
+ouso_output() { #This function reorganizes the output as needed by d.ouso's pipeline.
+ 	if [ $# -eq 0 ]
+	then
+		echo "Input error..."
+		echo -e "\tUsage: ${FUNCNAME[0]} [-i -o ]\n\t-i\tIllumina reads analysis\n\t-o\tONT reads analysis"
+      		return 1
+	fi
+	
+	unset gcoverage_path
+	unset quast_path
+	unset snpeff_path
+	unset con_path
+	unset mqc_path
+
+	local OPTIND=1
+	while getopts 'io' key
+	do
+		case "${key}" in
+			i)
+				illumina_regex='^fastqc.*$'
+				illumina_test=$(grep "fastqc" ${INDIR}/results/pipeline_info/software_versions.tsv)
+				if [[ "$illumina_test" =~ $illumina_regex ]]
+				then
+					echo -e "\tProceeding with generating aggregation of nf-core/viralrecon results from illumina-reads analysis"
+					gcoverage_path=${INDIR}/results/variants/bowtie2/mosdepth
+					#echo $gcoverage_path
+					quast_path=${INDIR}/results/variants/ivar/quast
+					#echo $quast_path
+					snpeff_path=${INDIR}/results/variants/ivar/snpeff
+					#echo $snpeff_path
+					con_path=${INDIR}/results/variants/ivar/consensus
+					#echo $con_path
+					mqc_path=${INDIR}/results/multiqc
+					#echo $mqc_path
+				else
+					echo -e "\tError!\n\tThe analysis results does not resemble the nf-core/viralrecon analysis output from an illumina sequencing run"
+					return 1
+				fi
+				;;
+			o)
+				ont_regex='^artic.*$'
+				ont_test=$(grep "artic" ${INDIR}/results/pipeline_info/software_versions.tsv)
+				if [[ "$ont_test" =~ $ont_regex ]]
+				then
+					echo -e "\tProceeding with generating aggregation of nf-core/viralrecon results from ONT-reads analysis"
+					gcoverage_path=${INDIR}/results/medaka/mosdepth
+					quast_path=${INDIR}/results/medaka/quast
+					snpeff_path=${INDIR}/results/medaka/snpeff
+					mqc_path=${INDIR}/results/multiqc/medaka
+					con_path=${INDIR}/results/medaka
+				else
+					echo -e "\tError!\n\tThe analysis results does not resemble the nf-core/viralrecon analysis output from an ONT sequencing reads"
+					return 1
+				fi
+				;;
+			?)
+				echo "Input error..."
+				echo -e "\tUsage: ${FUNCNAME[0]} [-i -o ]\n\t-i\tIllumina reads analysis\n\t-o\tONT reads analysis"
+				return 1
+				;;
+		esac
+	done
+	src_dir=${INDIR##*/}
+	ousodir=${INDIR}/${src_dir}	
+	#echo $ousodir
+	if [ -d ${ousodir} ]
+	then
+		rm -rf ${ousodir}
+		echo -e "\t${ousodir} was found and has been deleted"
+	fi
+	echo -e "\tCreating ${src_dir} and subdirs: nxt png snpEff plt dpt/amplicon dpt/genome qcs var"
+	mkdir -p ${ousodir}/nxt ${ousodir}/png ${ousodir}/snpEff ${ousodir}/plt ${ousodir}/dpt/amplicon ${ousodir}/dpt/genome ${ousodir}/qcs ${ousodir}/var
+	cp ${gcoverage_path}/amplicon/all_samples.mosdepth.heatmap.pdf ${ousodir}/plt
+	echo -e "\tDone copying to */plt"
+	cp ${gcoverage_path}/amplicon/*tsv ${ousodir}/dpt/amplicon
+	echo -e "\tDone copying to */dpt/amplicon"
+	cp ${gcoverage_path}/genome/*tsv ${ousodir}/dpt/genome
+	echo -e "\tDone copying to */dpt/genome"
+	cp ${quast_path}/transposed_report.tsv ${ousodir}/qcs
+	echo -e "\tDone copying to */qcs"
+	cp ${INDIR}/pangolin/*.csv ${ousodir}/png
+	echo -e "\tDone copying to */png"
+	cp ${snpeff_path}/*vcf ${ousodir}/snpEff
+	echo -e "\tDone copying to */snpEff"
+	cp ${mqc_path}/summary_variants_metrics_mqc.csv ${ousodir}/qcs
+	echo -e "\tDone copying to */qcs"
+	cp ${con_path}/*.consensus.all.fasta ${ousodir}/png
+	echo -e "\tDone copying to */png"
+	cp ${INDIR}/nextclade/* ${ousodir}/nxt
+	echo -e "\tDone copying to */nxt"
+	if [ $? -eq 0 ]
+	then
+		echo -e "\t${ousodir} has been successfully generated"
+	else
+		echo -e "\tError copying results. Kindly check"
+	fi
+	unset INDIR
+}

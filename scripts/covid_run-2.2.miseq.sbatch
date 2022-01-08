@@ -104,9 +104,9 @@ then
 	fi
 
 	#Post Variant-Calling analysis analysis
-	if [ -f ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa ]; then rm ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa; fi &&	cat ${INDIR}/${results}/variants/ivar/consensus/*.consensus.fa >> ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa
+	if [ -f ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta ]; then rm ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta; fi &&	cat ${INDIR}/${results}/variants/ivar/consensus/*.consensus.fa >> ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta
 	if [ ! -d ${INDIR}/alignment ]; then mkdir -p ${INDIR}/alignment; fi
-	if [ -f ${INDIR}/alignment/${src_dir1}_con.fasta ]; then rm ${INDIR}/alignment/${src_dir1}_con.fasta; fi && cat ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}_con.fasta
+	if [ -f ${INDIR}/alignment/${src_dir1}.consensus.all.fasta ]; then rm ${INDIR}/alignment/${src_dir1}.consensus.all.fasta; fi && cat ${INDIR}/${results}/variants/ivar/consensus/*.consensus.fa ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}.consensus.all.fasta
 
 
 	#Nextclade analysis
@@ -116,7 +116,7 @@ then
 	echo -e "\tBeginning nextclade analysis....\n\tDownloading 'nextclade datasets': genemap.gff, qc.json, sequences.fasta, tree.json, primers.csv, reference.fasta, tag.json"
 	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade dataset get --name='sars-cov-2' --reference='MN908947' --output-dir=${INDIR}/../../data/core_data
 	echo -e "\tProceeding with Nextclade analysis."
-	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv -r ${DATADIR}/sar-cov-2-MN908947.3.fa -a ${DATADIR}/tree.json --input-qc-config ${DATADIR}/qc.json --input-gene-map ${DATADIR}/genemap.gff |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
+	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv -r ${DATADIR}/sar-cov-2-MN908947.3.fa -a ${DATADIR}/tree.json --input-qc-config ${DATADIR}/qc.json --input-gene-map ${DATADIR}/genemap.gff |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
 	#Nextclade V 0.12.0 HPC
 	#nextclade.js -i ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa --output-tree ${INDIR}/nextclade/${src_dir1}_con.json --output-tsv ${INDIR}/nextclade/${src_dir1}_con.tsv #--input-tree --input-root-seq ${DATADIR}/sar-cov-2-MN908947.3.fa --input-gene-map
 	
@@ -125,10 +125,10 @@ then
 	#echo -e "Performing Pangolin analysis"
 
 	#Multiple Sequence Alignment
-	if [ -f ${INDIR}/alignment/${src_dir1}_con.aln ]; then rm ${INDIR}/alignment/${src_dir1}_con.aln; fi && cat ${INDIR}/nextclade/${src_dir1}.nextclade.aligned.fasta ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}_con.aln
+	if [ -f ${INDIR}/alignment/${src_dir1}.consensus.all.aln ]; then rm ${INDIR}/alignment/${src_dir1}.consensus.all.aln; fi && cat ${INDIR}/nextclade/${src_dir1}.nextclade.aligned.fasta ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}.consensus.all.aln
 	#muscle -in ${INDIR}/alignment/${src_dir1}_con.fasta -fastaout ${INDIR}/alignment/${src_dir1}_con.aln -maxiters 2
 
 	#Phylohenetic inference
 	if [ ! -d ${INDIR}/phylogeny ]; then mkdir -p ${INDIR}/phylogeny; fi
-	iqtree -s ${INDIR}/alignment/${src_dir1}_con.aln -m MFP -bb 1000 -bnni -alrt 1000 -nt AUTO -pre ${INDIR}/phylogeny/${src_dir1}_con
+	iqtree -s ${INDIR}/alignment/${src_dir1}.consensus.all.aln -m MFP -bb 1000 -bnni -alrt 1000 -nt AUTO -pre ${INDIR}/phylogeny/${src_dir1}.consensus.all
 fi

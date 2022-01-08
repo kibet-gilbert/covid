@@ -51,13 +51,15 @@ then
 	echo -e "\tGunzipping successfull.\n\tProceeding with variant call analysis."
 else
 	echo -e "Please address ./fastq_*/*/*.fastq.gz files, they need to be in ./fastq_*/*/*.fastq format"
+	#continue
 fi
 nextflow run nf-core/viralrecon -r 2.2 \
 	-w ${WKDIR} \
 	--input ${INDIR}/samplesheet.csv \
 	--fastq_dir ${INDIR}/fastq_pass/ \
 	--fast5_dir ${INDIR}/fast5_pass/ \
-	--sequencing_summary ${INDIR}/sequencing_summary*.txt \
+	--skip_pycoqc \
+	--skip_nanoplot \
 	--min_barcode_reads 100 \
 	--min_guppyplex_reads 10 \
 	--artic_minion_caller medaka \
