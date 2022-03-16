@@ -2,7 +2,7 @@
 #SBATCH -p batch
 #SBATCH -J VarCall_nf
 #SBATCH --qos vip
-#SBATCH -n 30
+#SBATCH -n 40
 
 set -uE
 trap ' echo Error $? occured on $LINENO && exit 1' ERR
@@ -41,10 +41,10 @@ source ${INDIR}/../../scripts/process_files.sh
 #RRead_suffix="L001_R2_001.fastq.gz"
 
 #NextSeq
-#FRead_suffix="con_R1_001.fastq.gz"
-#RRead_suffix="con_R2_001.fastq.gz"
+FRead_suffix="con_R1_001.fastq.gz"
+RRead_suffix="con_R2_001.fastq.gz"
 
-samplesheet_gen -f ${FRead_suffix} -r ${RRead_suffix}
+#samplesheet_gen -f ${FRead_suffix} -r ${RRead_suffix}
 
 #run variant calling job on N (SBATCH -n) threads/cores
 
@@ -63,8 +63,8 @@ nextflow run nf-core/viralrecon -r 2.2 \
 	--min_mapped_reads 1000 \
         --primer_left_suffix '_LEFT' \
         --primer_right_suffix '_RIGHT' \
-    	--fasta ${DATADIR}/GCA_009858895.3_ASM985889v3_genomic.200409.fna.gz\
-	--gff ${DATADIR}/GCA_009858895.3_ASM985889v3_genomic.200409.gff.gz \
+    	--fasta ${DATADIR}/NC_045512.2_20200718.fna.gz\
+	--gff ${DATADIR}/NC_045512.2_20200718.gff.gz \
 	--protocol amplicon \
 	--primer_fasta ${DATADIR}/nCoV-2019.artic.V3.primer.fasta \
 	--primer_bed ${DATADIR}/nCoV-2019.artic.V3.bed \
@@ -77,7 +77,7 @@ nextflow run nf-core/viralrecon -r 2.2 \
 	--skip_plasmidid \
 	--skip_cutadapt \
 	--skip_assembly_quast \
-	--max_cpus 30 \
+	--max_cpus 40 \
 	--max_memory '40.GB' \
 	-profile singularity -resume |& tee ${INDIR}/nf_viralrecon.out.log
 if [ $? -eq 0 ]
@@ -104,10 +104,9 @@ then
 	fi
 
 	#Post Variant-Calling analysis analysis
-	if [ -f ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa ]; then rm ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa; fi &&	cat ${INDIR}/${results}/variants/ivar/consensus/*.consensus.fa >> ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa
+	if [ -f ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta ]; then rm ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta; fi &&       cat ${INDIR}/${results}/variants/ivar/consensus/*.consensus.fa >> ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta
 	if [ ! -d ${INDIR}/alignment ]; then mkdir -p ${INDIR}/alignment; fi
-	if [ -f ${INDIR}/alignment/${src_dir1}_con.fasta ]; then rm ${INDIR}/alignment/${src_dir1}_con.fasta; fi && cat ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}_con.fasta
-
+	if [ -f ${INDIR}/alignment/${src_dir1}.consensus.all.fasta ]; then rm ${INDIR}/alignment/${src_dir1}.consensus.all.fasta; fi && cat ${INDIR}/${results}/variants/ivar/consensus/*.consensus.fa ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}.consensus.all.fasta
 
 	#Nextclade analysis
 	echo -e "Performing nextclade analysis"
@@ -116,7 +115,7 @@ then
 	echo -e "\tBeginning nextclade analysis....\n\tDownloading 'nextclade datasets': genemap.gff, qc.json, sequences.fasta, tree.json, primers.csv, reference.fasta, tag.json"
 	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade dataset get --name='sars-cov-2' --reference='MN908947' --output-dir=${INDIR}/../../data/core_data
 	echo -e "\tProceeding with Nextclade analysis."
-	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv -r ${DATADIR}/sar-cov-2-MN908947.3.fa -a ${DATADIR}/tree.json --input-qc-config ${DATADIR}/qc.json --input-gene-map ${DATADIR}/genemap.gff |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
+	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}.consensus.all.fasta --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv -r ${DATADIR}/sar-cov-2-MN908947.3.fa -a ${DATADIR}/tree.json --input-qc-config ${DATADIR}/qc.json --input-gene-map ${DATADIR}/genemap.gff |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
 	#Nextclade V 0.12.0 HPC
 	#nextclade.js -i ${INDIR}/${results}/variants/ivar/consensus/${src_dir1}_con.fa --output-tree ${INDIR}/nextclade/${src_dir1}_con.json --output-tsv ${INDIR}/nextclade/${src_dir1}_con.tsv #--input-tree --input-root-seq ${DATADIR}/sar-cov-2-MN908947.3.fa --input-gene-map
 	
@@ -125,10 +124,10 @@ then
 	#echo -e "Performing Pangolin analysis"
 
 	#Multiple Sequence Alignment
-	if [ -f ${INDIR}/alignment/${src_dir1}_con.aln ]; then rm ${INDIR}/alignment/${src_dir1}_con.aln; fi && cat ${INDIR}/nextclade/${src_dir1}.nextclade.aligned.fasta ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}_con.aln
+	if [ -f ${INDIR}/alignment/${src_dir1}.consensus.all.aln ]; then rm ${INDIR}/alignment/${src_dir1}.consensus.all.aln; fi && cat ${INDIR}/nextclade/${src_dir1}.nextclade.aligned.fasta ${DATADIR}/sar-cov-2-MN908947.3.fa >> ${INDIR}/alignment/${src_dir1}.consensus.all.aln
 	#muscle -in ${INDIR}/alignment/${src_dir1}_con.fasta -fastaout ${INDIR}/alignment/${src_dir1}_con.aln -maxiters 2
 
 	#Phylohenetic inference
 	if [ ! -d ${INDIR}/phylogeny ]; then mkdir -p ${INDIR}/phylogeny; fi
-	iqtree -s ${INDIR}/alignment/${src_dir1}_con.aln -m MFP -bb 1000 -bnni -alrt 1000 -nt AUTO -pre ${INDIR}/phylogeny/${src_dir1}_con
+	iqtree -s ${INDIR}/alignment/${src_dir1}.consensus.all.aln -m MFP -bb 1000 -bnni -alrt 1000 -nt AUTO -pre ${INDIR}/phylogeny/${src_dir1}.consensus.all
 fi

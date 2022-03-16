@@ -799,8 +799,8 @@ ouso_output() { #This function reorganizes the output as needed by d.ouso's pipe
 	do
 		case "${key}" in
 			i)
-				illumina_regex='^fastqc.*$'
-				illumina_test=$(grep "fastqc" ${INDIR}/results/pipeline_info/software_versions.tsv)
+				illumina_regex='fastqc.*$'
+				illumina_test=$(grep "fastqc" ${INDIR}/results/pipeline_info/software_versions.*)
 				if [[ "$illumina_test" =~ $illumina_regex ]]
 				then
 					echo -e "\tProceeding with generating aggregation of nf-core/viralrecon results from illumina-reads analysis"
@@ -820,8 +820,8 @@ ouso_output() { #This function reorganizes the output as needed by d.ouso's pipe
 				fi
 				;;
 			o)
-				ont_regex='^artic.*$'
-				ont_test=$(grep "artic" ${INDIR}/results/pipeline_info/software_versions.tsv)
+				ont_regex='artic.*$'
+				ont_test=$(grep "artic" ${INDIR}/results/pipeline_info/software_versions.*)
 				if [[ "$ont_test" =~ $ont_regex ]]
 				then
 					echo -e "\tProceeding with generating aggregation of nf-core/viralrecon results from ONT-reads analysis"

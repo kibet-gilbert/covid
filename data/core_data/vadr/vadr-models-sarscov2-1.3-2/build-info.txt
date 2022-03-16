@@ -1,0 +1,5 @@
+current git commit hash: 04eeb4e
+git repo:     https://nawrockie@bitbucket.org/nawrockie/vadr-models-sarscov2.git
+git branch:   master
+dir name:     vadr-models-sarscov2-1.3-2
+packaged on: Mon Nov 29 16:24:21 EST 2021

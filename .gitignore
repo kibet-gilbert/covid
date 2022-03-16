@@ -1,15 +1,6 @@
-data/202*
-data/all_qcs/*
-data/auspice_test_data/*
-data/COV_ILRI/*
-data/COV_ILRI_ONT/*
-data/DRC_nanopore/*
-data/gisaid/*
-data/ILRI_KEMRI_WSU/*
-data/KEMRI/*
-data/ouso/*
-data/test_data/*
-data/variants/*
+data/*
+!data/test_data/*
+!data/core_data*
 data/*.xlsx
 *.xml
 .ipynb_checkpoints/
@@ -31,3 +22,4 @@ data/*.xlsx
 scripts/guppy/data/template*
 scripts/singularity/depot.*img
 .nextflow.log*
+slurm*
