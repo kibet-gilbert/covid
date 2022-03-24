@@ -806,7 +806,7 @@ ouso_output() { #This function reorganizes the output as needed by d.ouso's pipe
 					echo -e "\tProceeding with generating aggregation of nf-core/viralrecon results from illumina-reads analysis"
 					gcoverage_path=${INDIR}/results/variants/bowtie2/mosdepth
 					#echo $gcoverage_path
-					quast_path=${INDIR}/results/variants/ivar/quast
+					quast_path=${INDIR}/results/variants/ivar/consensus/ivar/quast
 					#echo $quast_path
 					snpeff_path=${INDIR}/results/variants/ivar/snpeff
 					#echo $snpeff_path
