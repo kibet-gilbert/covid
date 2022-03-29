@@ -89,6 +89,7 @@ samplesheet_gen() { #Generate a samplesheet.csv
 
 	index=0
 	echo "sample,fastq_1,fastq_2" > "$FASTQDIR/samplesheet.csv"
+	#echo "sample,group,short_reads_1,short_reads_2,long_reads" > "$FASTQDIR/samplesheet.csv"
 	for file in ${f_array[@]}
 	do
 		ffilename=`basename -- ${file}`
@@ -109,6 +110,7 @@ samplesheet_gen() { #Generate a samplesheet.csv
 			then
 
 				echo "${f_prefix}",$file,$file2 >> "$FASTQDIR/samplesheet.csv"
+				#echo "${f_prefix}",,$file,$file2, >> "$FASTQDIR/samplesheet.csv"
 				index=`expr ${index} + 1`
 			else
 				continue
@@ -806,7 +808,7 @@ ouso_output() { #This function reorganizes the output as needed by d.ouso's pipe
 					echo -e "\tProceeding with generating aggregation of nf-core/viralrecon results from illumina-reads analysis"
 					gcoverage_path=${INDIR}/results/variants/bowtie2/mosdepth
 					#echo $gcoverage_path
-					quast_path=${INDIR}/results/variants/ivar/consensus/ivar/quast
+					quast_path=${INDIR}/results/variants/ivar/quast
 					#echo $quast_path
 					snpeff_path=${INDIR}/results/variants/ivar/snpeff
 					#echo $snpeff_path
@@ -868,8 +870,6 @@ ouso_output() { #This function reorganizes the output as needed by d.ouso's pipe
 	echo -e "\tDone copying to */qcs"
 	cp ${con_path}/*.consensus.all.fasta ${ousodir}/png
 	echo -e "\tDone copying to */png"
-	cp ${INDIR}/nextclade/* ${ousodir}/nxt
-	echo -e "\tDone copying to */nxt"
 	if [ $? -eq 0 ]
 	then
 		echo -e "\t${ousodir} has been successfully generated"

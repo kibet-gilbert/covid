@@ -40,15 +40,15 @@ echo -e "\tUsing ${WORKDIR}/fast5_pass on ${SLURMD_NODENAME}:${SLURM_JOBID}"
 #run basecalling job on N (SBATCH -ni) threads/cores
 singularity run --app guppy_basecaller --nv ${INDIR}/../../scripts/guppy/ont_guppy_GPU-5.0.11.sif \
 	--device "cuda:0" \
-	-i ${INDIR}/fast5/ \
+	-i ${INDIR}/fast5_skip/ \
 	--save_path ${INDIR}/basecall/ \
 	--config "/usr/ont-guppy/data/dna_r9.4.1_450bps_hac.cfg" \
 	--calib_detect \
 	--gpu_runners_per_device 32 \
 	--num_callers 12 \
 	--compress_fastq \
-	--post_out \
-	--resume
+	--post_out #\
+#	--resume
 
 singularity run --app guppy_barcoder --nv ${INDIR}/../../scripts/guppy/ont_guppy_GPU-5.0.11.sif \
 	--device "cuda:0" \
