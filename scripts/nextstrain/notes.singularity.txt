@@ -1,0 +1,2 @@
+How to pull/update nextstrain singularity image: --force will delete the already installed image.
+$ singularity pull --force docker://nextstrain/base:latest

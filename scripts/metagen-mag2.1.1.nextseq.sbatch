@@ -10,7 +10,7 @@ trap ' echo Error $? occured on $LINENO && exit 1' ERR
 #load the nextflow module
 module load nextflow/21.10
 NXF_OPTS='-Xms1g -Xmx4g'
-WKDIR=/var/scratch/$USER/work
+WKDIR=/var/scratch/$USER/work_mag
 NXF_SINGULARITY_CACHEDIR=${WKDIR}/singularity
 export NXF_SINGULARITY_CACHEDIR=${WKDIR}/singularity
 
@@ -19,7 +19,7 @@ INDIR=$PWD
 FASTQDIR=${INDIR}/fastq
 src_dir=${INDIR##*/}
 DATADIR=${INDIR}/../core_data
-WORKDIR=/var/scratch/$USER/2022.03.16_${src_dir}
+WORKDIR=/var/scratch/$USER/${src_dir}_analysis
 src_dir1=${WORKDIR##*/}
 mkdir -p $WORKDIR
 cd $WORKDIR
@@ -49,13 +49,14 @@ source ${INDIR}/../../scripts/process_files.sh
 #	If maximum memory available "mem" Gbs, limit it to half that i.e 1/2 mem (--max_memory)
 #*_con_R{1,2}_001.fastq.gz
 
-nextflow pull nf-core/mag
+#nextflow pull nf-core/mag
 
 nextflow run nf-core/mag -r 2.1.1 \
 	--input $INDIR/fastq/samplesheet.csv \
 	--email g.kibet@cgiar.org \
+	-w $WKDIR \
 	--single_end false \
-	--outdir './results' \
+	--outdir $WORKDIR/results \
 	--igenomes_base 's3://ngi-igenomes/igenomes' \
 	--megahit_fix_cpu_1 \
 	--spades_fix_cpus 4 \
@@ -70,7 +71,7 @@ nextflow run nf-core/mag -r 2.1.1 \
 	--skip_adapter_trimming false \
 	--centrifuge_db $DATADIR/metagen/hpvc.tar.gz \
 	--cat_db_generate false \
-	--kraken2_db $DATADIR/metagen/minikraken_8GB_202003.tgz \
+	--kraken2_db $DATADIR/metagen/k2_pluspf_20210517.tar.gz \
 	--skip_krona false \
 	--cat_db $DATADIR/metagen/CAT_prepare_20210107.tar.gz \
 	--cat_db_generate false \
@@ -89,7 +90,7 @@ nextflow run nf-core/mag -r 2.1.1 \
 	--skip_quast false \
 	--skip_prodigal false \
 	--binning_map_mode 'group' \
-	--skip_binning false \
+	--skip_binning true \
 	--min_contig_size 1500 \
 	--min_length_unbinned_contigs 1000000 \
 	--max_unbinned_contigs 100 \

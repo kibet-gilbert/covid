@@ -2,13 +2,13 @@
 #SBATCH -p batch
 #SBATCH -J VarCall_nf
 #SBATCH --qos vip
-#SBATCH -n 16
+#SBATCH -n 30
 
 set -uE
 trap ' echo Error $? occured on $LINENO && exit 1' ERR
 
 #load the nextflow module
-module load iqtree/1.6.12
+module load iqtree/2.2.0
 WKDIR=/var/scratch/$USER/work
 
 #Setting work Directory in HPC
@@ -23,11 +23,12 @@ cd $WORKDIR
 echo -e "\tUsing $WORKDIR on $SLURMD_NODENAME"
 #echo -e "\tSetting up the working environment installations"
 #rsync -u --size-only "${ENVDIR}" "${ENVDIR_WKDIR}"
-source ${INDIR}/../../scripts/process_files.sh
+source ${INDIR}/../../../scripts/process_files.sh
 
 #Nextclade analysis:
 #singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/alignment/${src_dir1}.consensus.all.fasta --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv -r ${DATADIR}/sar-cov-2-MN908947.3.fa -a ${DATADIR}/tree.json --input-qc-config ${DATADIR}/qc.json --input-gene-map ${DATADIR}/genemap.gff |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
 
 #Phylohenetic inference
 if [ ! -d ${INDIR}/phylogeny ]; then mkdir -p ${INDIR}/phylogeny; fi
-iqtree -s ${INDIR}/alignment/DRC_nanopore_2.0.nextclade.aligned.ref.fasta -m GTR+F+R3 -bb 1000 -bnni -alrt 1000 -nt AUTO -pre ${INDIR}/phylogeny/DRC_nanopore_2.0.nextclade.aligned.ref
+iqtree2 -s ${INDIR}/DRC-74_global-399_open_metadata.filtered.fasta -m GTR+F+R3 -B 10000 -bnni -alrt 1000 -T AUTO -pre ${INDIR}/phylogeny/DRC-74_global-399_open_metadata.filtered.nextclade.aligned.ufboot
+iqtree2 -s ${INDIR}/DRC-74_global-399_open_metadata.filtered.fasta -m GTR+F+R3 -b 100 -lbp 1000 -T AUTO -cptime 60 -pre ${INDIR}/phylogeny/DRC-74_global-399_open_metadata.filtered.nextclade.aligned.nanparam

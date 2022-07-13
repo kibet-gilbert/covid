@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #SBATCH -p batch
-#SBATCH --qos vip
 #SBATCH -J ONTVarCall_nf
-#SBATCH -n 20
+#SBATCH --qos vip
+#SBATCH -n 28
 
 set -uE
 trap ' echo Error $? occured on $LINENO && exit 1' ERR
 
 #load the nextflow module
-module load nextflow/21.04.3
+module load nextflow/21.10
 module load nextclade/0.12.0
 module load muscle/3.8.31
 module load iqtree/1.6.12
@@ -23,6 +23,7 @@ src_dir=${INDIR##*/}
 DATADIR=${INDIR}/../core_data
 WORKDIR=/var/scratch/$USER/"`date +"%Y.%m.%d"`_${src_dir}"
 src_dir1=${WORKDIR##*/}
+SCRIPT_DIR=${INDIR}/../../scripts
 mkdir -p $WORKDIR
 cd $WORKDIR
 
@@ -54,12 +55,12 @@ else
 	echo -e "Please address ./fastq_*/*/*.fastq.gz files, they need to be in ./fastq_*/*/*.fastq format"
 fi
 #nextflow pull nf-core/viralrecon
-nextflow run nf-core/viralrecon -r 2.2 \
+nextflow run nf-core/viralrecon -r 2.4.1 \
 	-w ${WKDIR} \
 	--email g.kibet@cgiar.org \
 	--input ${INDIR}/samplesheet.csv \
 	--outdir './results' \
-	--fastq_dir ${INDIR}/demultiplex/ \
+	--fastq_dir ${INDIR}/fastq_pass/ \
 	--fast5_dir ${INDIR}/fast5_pass/ \
 	--sequencing_summary ${INDIR}/sequencing_summary*.txt \
 	--min_barcode_reads 100 \
@@ -132,17 +133,29 @@ then
 	echo -e "\tBeginning nextclade analysis....\n\tDownloading 'nextclade datasets': genemap.gff, qc.json, sequences.fasta, tree.json, primers.csv, reference.fasta, tag.json"
 	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade dataset get --name='sars-cov-2' --reference='MN908947' --output-dir=${INDIR}/../../data/core_data
 	echo -e "\tProceeding with Nextclade analysis."
-	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/${results}/medaka/${src_dir1}.consensus.all.fasta --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv -r ${DATADIR}/sar-cov-2-MN908947.3.fa -a ${DATADIR}/tree.json --input-qc-config ${DATADIR}/qc.json --input-gene-map ${DATADIR}/genemap.gff |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
+	singularity run ${INDIR}/../../scripts/nextclade/nextclade_latest.sif nextclade run -i ${INDIR}/${results}/medaka/${src_dir1}.consensus.all.fasta --output-dir ${INDIR}/nextclade --output-basename ${src_dir1}.nextclade --output-tree ${INDIR}/nextclade/${src_dir1}.nextclade.json --output-tsv ${INDIR}/nextclade/${src_dir1}.nextclade.tsv --input-dataset ${DATADIR}/sars-cov-2 --input-root-seq ${DATADIR}/sars-cov-2/reference.fasta --input-tree ${DATADIR}/sars-cov-2/tree.json --input-qc-config ${DATADIR}/sars-cov-2/qc.json --input-gene-map ${DATADIR}/sars-cov-2/genemap.gff --input-pcr-primers ${DATADIR}/sars-cov-2/primers.csv |& tee -a ${INDIR}/nextclade/${src_dir1}.nextclade.log
 	if [ $? -eq 0 ]
 	then
+		echo -e "Nextclade analysis completed successfully"
 		cp ${INDIR}/nextclade/*.aligned.fasta ${INDIR}/alignment/
 	else
 		echo -e "Nextclade analysis failed"
 	fi
 
 	#Pangolin analysis
+	#Updating latest release constellations and pangolin: pangoLEARN MODEL, header files, USHER tree and alias files.
 	if [ ! -d ${INDIR}/pangolin ]; then mkdir -p ${INDIR}/pangolin; fi
-	 #echo -e "Performing Pangolin analysis"
+	singularity run ${SCRIPT_DIR}/pangolin/pangolin_latest.sif pangolin --update-data --datadir ${DATADIR}/pangolin/
+	#Proceeding with analysis.
+	echo -e "\n\tPerforming PANGOLIN USHER analysis\t"
+	singularity run ${SCRIPT_DIR}/pangolin/pangolin_latest.sif pangolin alignment/${src_dir1}.consensus.all.fasta --alignment --analysis-mode "usher" --max-ambig 0.3 --min-length 25000 --outdir ${INDIR}/pangolin/ --outfile ${src_dir1}.pangolin.usher.csv --datadir ${DATADIR}/pangolin/ |& tee -a ${INDIR}/pangolin/${src_dir1}.pangolin.usher.log
+	if [ $? -eq 0 ]
+	then
+		echo -e "Pangolin USHER analysis completed successfullyi"
+	elif [ $? -ne 0 ]
+	then
+		echo -e "PANGOLIN USHER analysis NOT completed successfully"
+	fi
 
 	#Phylohenetic inference
 	if [ ! -d ${INDIR}/phylogeny ]; then mkdir -p ${INDIR}/phylogeny; fi

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="594mm"
+   height="841mm"
+   viewBox="0 0 594 841"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="workflow00_2.4.1.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:snap-page="false"
+     inkscape:snap-grids="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="0.57"
+     inkscape:cx="1080.7018"
+     inkscape:cy="571.05263"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1323" />
+    <sodipodi:guide
+       position="47.625,608.16667"
+       orientation="1,0"
+       id="guide1515" />
+    <sodipodi:guide
+       position="550.33335,639.91665"
+       orientation="1,0"
+       id="guide1517" />
+    <sodipodi:guide
+       position="312.20834,793.37498"
+       orientation="0,-1"
+       id="guide1519" />
+    <sodipodi:guide
+       position="306.91668,36.666666"
+       orientation="0,-1"
+       id="guide1521" />
+    <sodipodi:guide
+       position="312.20834,703.41665"
+       orientation="1,0"
+       id="guide1523" />
+    <sodipodi:guide
+       position="174.625,713.99998"
+       orientation="1,0"
+       id="guide1525" />
+    <sodipodi:guide
+       position="433.91668,682.24998"
+       orientation="1,0"
+       id="guide1527" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#000000;stroke-width:0.264583"
+       id="path876-3"
+       ry="10.819139"
+       rx="11.087551"
+       cy="66.782524"
+       cx="216.08755" />
+    <ellipse
+       style="fill:#000000;stroke-width:0.267844;image-rendering:auto"
+       id="path876-3-7"
+       ry="11.0875"
+       rx="11.087551"
+       cy="67.045502"
+       cx="386.08755" />
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+Bootstrap: docker
+From: python:3
+
+%post
+    pip install primalscheme
+
+%environment
+    export SHELL=/bin/bash
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+
+%test
+    primalscheme --help
+    primalscheme multiplex --help
+
+%help
+    Singularity container for treetime
+    Apps available:
+    * primalscheme
+    * primalscheme arg
+
+%labels
+    author="gilbert kibet"
+    author_email="kibet.gilbert@ymail.com"
