@@ -1,0 +1,2 @@
+Pull the singularity image using:
+$ singularity pull --force docker://nfcore/tools:latest

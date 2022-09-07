@@ -1,0 +1,49 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%post
+    apt update
+    apt -y install git wget lsb-release gpg xz-utils guix
+    mkdir /usr/pigx
+    cd /usr/pigx
+    #source /home/$USER/.bashrc
+    #guix pull
+    URL="https://github.com/BIMSBbioinfo/pigx_sars-cov-2.git"
+    git clone $URL
+    cd pigx_sars-cov-2
+    git submodule update --init
+    guix install pigx
+    source /etc/profile
+    USE_GUIX_INFERIOR=t guix environment --pure -m manifest.scm --preserve=GUIX_LOCPATH
+    guix install pigx_sars-cov-2
+    ./bootstrap.sh
+    ./configure
+    make
+    make check
+
+%environment
+    export SHELL=/bin/bash
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+
+%test
+    pigx-sars-cov-2 --help
+
+%runscript
+    echo "Run with '--app' option (run 'singularity run-help' for available apps)"
+
+%apprun pigx-sars-cov2-ww
+    pigx-sars-cov2-ww $*
+
+%apprun download_databases
+    prefix="$(dirname pigx-sars-cov2-ww)/../"
+    $prefix/libexec/pigx_sars-cov2-ww/scripts/download_databases.sh
+
+%help
+    Singularity container for pigx-sars-cov2-ww
+    Apps available:
+    * pigx-sars-cov2-ww
+
+%labels
+    author="Gilbert Kibet"
+    author_email="gilbert.kibet@ymail.com"
